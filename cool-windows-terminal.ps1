@@ -1,6 +1,24 @@
+Install-Module -Name PowerShellGet -Force
+Install-Module PSReadLine -AllowPrerelease -Force
+Install-Module PSReadLine
+
 winget install --id Starship.Starship
 
-$exp = "Invoke-Expression (&starship init powershell)"
+$exp = "Import-Module PSReadLine
+
+Invoke-Expression (&starship init powershell)
+
+# Shows navigable menu of all options when hitting Tab
+Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
+
+# Autocompleteion for Arrow keys
+Set-PSReadLineOption -HistorySearchCursorMovesToEnd
+Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
+Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+
+Set-PSReadLineOption -ShowToolTips
+Set-PSReadLineOption -PredictionSource History"
+
 $exp | Out-File ~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
 
 New-Item -ItemType Directory -Force ~/.config;New-Item -ItemType file -Force ~/.config/starship.toml;
